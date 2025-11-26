@@ -1,7 +1,7 @@
 # 📘 Amit AI Content Builder
 
-> A production-grade multi-agent GenAI system for generating curriculum-aligned educational content.  
-> Built end-to-end by a single engineer.
+Amit AI Builder is a production-grade multi-agent GenAI system that automatically generates curriculum-aligned lessons, questions, and LMS-ready instructional content.
+Built end-to-end using FastAPI, MongoDB, multi-agent LLM orchestration, and YAML-driven prompt pipelines.
 
 ---
 ## 📑 Table of Contents
@@ -531,50 +531,61 @@ Loop until:
 ---
 ## 🧠 Agents
 
-Amit AI Content Builder is powered by a modular suite of specialized LLM agents.
-Each agent follows a strict input/output contract, uses a dedicated YAML prompt, and is orchestrated through a central controller to ensure deterministic and pedagogically aligned outputs.
+Amit AI Content Builder is powered by a modular suite of specialized LLM agents.  
+Each agent follows a **strict input/output contract**, uses a **dedicated YAML prompt**,  
+and is orchestrated through a central controller to ensure deterministic and pedagogically aligned outputs.
 
-1. TextEditorAgent
+---
 
-Refines and restructures raw text for student-facing materials.
-Responsibilities: cleanup, simplification, tone alignment, and LMS-ready formatting.
-File: text_editor_agent.py
+### **1. TextEditorAgent**
+- Refines and restructures raw text for student-facing materials.  
+- **Responsibilities:** cleanup, simplification, tone alignment, LMS-ready formatting  
+- **File:** `text_editor_agent.py`
 
-2. QuestionGeneratorAgent
+---
 
-Generates high-quality assessment items (MCQ, open-ended, matching) directly from content chunks.
-Responsibilities: question construction, distractor generation, and alignment with learning objectives.
-File: question_generator_agent.py
+### **2. QuestionGeneratorAgent**
+- Generates high-quality assessment items (MCQ, open-ended, matching) directly from content chunks.  
+- **Responsibilities:** question construction, distractor generation, alignment with learning objectives  
+- **File:** `question_generator_agent.py`
 
-3. BloomLevelVerifierAgent
+---
 
-Evaluates whether a generated question matches the required Bloom’s Taxonomy level.
-Responsibilities: cognitive classification and match scoring.
-File: bloom_level_verifier_agent.py
+### **3. BloomLevelVerifierAgent**
+- Evaluates whether a generated question matches the required Bloom’s Taxonomy level.  
+- **Responsibilities:** cognitive classification, match scoring  
+- **File:** `bloom_level_verifier_agent.py`
 
-4. DifficultyLevelVerifierAgent
+---
 
-Assesses the pedagogical difficulty of a question relative to the source text and target grade level.
-Responsibilities: difficulty scoring and alignment checks.
-File: difficulty_level_verifier_agent.py
+### **4. DifficultyLevelVerifierAgent**
+- Assesses the pedagogical difficulty of a question relative to the source text and grade level.  
+- **Responsibilities:** difficulty scoring, alignment checks  
+- **File:** `difficulty_level_verifier_agent.py`
 
-5. GroundingVerifierAgent
+---
 
-Ensures that every question is factually grounded in evidence from the original chunk, reducing hallucinations.
-Responsibilities: grounding validation, evidence extraction, and justification.
-File: grounding_verifier_agent.py
+### **5. GroundingVerifierAgent**
+- Ensures that every question is factually grounded in evidence from the original chunk.  
+- **Responsibilities:** grounding validation, evidence extraction, justification  
+- **File:** `grounding_verifier_agent.py`
 
-6. LessonContentAgent
+---
 
-A Stage 1 agent that generates full lesson content: introduction, structured paragraphs, summary, and discussion questions.
-Responsibilities: pedagogical content creation and hierarchical structuring.
-File: lesson_content_agent.py
+### **6. LessonContentAgent**
+- Stage 1 agent that generates full lesson content:  
+  introduction, structured paragraphs, summary, and discussion questions.  
+- **Responsibilities:** pedagogical content creation, hierarchical structuring  
+- **File:** `lesson_content_agent.py`
 
-7. MainLLMOrchestratorAgent
+---
 
-The system’s high-level controller responsible for coordinating agent execution and maintaining workflow consistency.
-Responsibilities: dynamic routing, agent selection, context propagation, and quality assurance.
-File: main_llm_orchestrator_agent.py
+### **7. MainLLMOrchestratorAgent**
+- High-level controller coordinating agent execution and workflow consistency.  
+- **Responsibilities:** dynamic routing, agent selection, context propagation, quality assurance  
+- **File:** `main_llm_orchestrator_agent.py`
+
+---
 ---
 ## 🔧 Normalizers & Validators
 
@@ -910,7 +921,8 @@ This stage enhances the raw educational content from Stage 1 by generating LMS-r
 - `test_validation.py` → Tests schema validation logic.
 
 ---
-
+## 🎥 Demo
+![Demo Screenshot](static/demo_screenshot.png)
 
 
 
