@@ -33,60 +33,94 @@ Each agent exposes a clear contract, allowing the pipeline to maintain pedagogic
 
 A robust **MongoDB persistence layer**, strict schema validation, and resilient error-handling mechanisms ensure operational reliability at scale.  
 The system is in full production use and provides the core technical foundation for future **adaptive-learning engines**, supporting metadata-driven personalization and dynamic content expansion.
+
 ---
-# 🚀 Key Features
-1. Multi-Agent GenAI Architecture
+## 🚀 Key Features
 
-Modular orchestration of specialized LLM agents (generation, editing, validation), each with strict I/O contracts for deterministic, reliable execution.
+---
 
-2. Two-Stage Content Pipeline
+### **1. Multi-Agent GenAI Architecture**
+Modular orchestration of specialized LLM agents (generation, editing, validation),  
+each with strict I/O contracts for deterministic, reliable execution.
 
-Stage 1: Source acquisition, contextual expansion, pedagogical processing.
+---
 
-Stage 2: Text refinement & question generation with validation loops.
-Stages isolated, API-driven, and idempotent.
+### **2. Two-Stage Content Pipeline**
+**Stage 1:** Source acquisition, contextual expansion, pedagogical processing.  
+**Stage 2:** Text refinement & question generation with validation loops.  
 
-3. Validation Stack for Question Quality
+Stages are isolated, API-driven, and idempotent.
 
+---
+
+### **3. Validation Stack for Question Quality**
 Tri-layer verification:
 
-Bloom level
+- **Bloom level**  
+- **Difficulty alignment**  
+- **Grounding & evidence**
 
-Difficulty alignment
-
-Grounding & evidence
 Ensures pedagogical and factual correctness.
 
-4. Intelligent Reject-Loop
+---
 
-Adaptive regeneration cycle with memory (bad_stems) that avoids repeating weak or invalid questions.
-
-5. LMS-Ready Structured Output
-
-All paragraphs and questions normalize into a strict LMS schema with hierarchy metadata (courseOutlineId → lessonId → pageId) and pedagogical fields.
-
-6. Pluggable LLM Providers
-
-Unified interface for OpenAI, Perplexity, and local models (Ollama/GGUF).
-Automatic retries, fallbacks, and consistent output formatting.
-
-7. Production-Grade MongoDB Layer
-
-Idempotent upserts, schema enforcement, structured collections (content_corpus, blocks, outlines, etc.), and metadata-driven traceability.
-
-8. YAML-Driven Prompt Templates
-
-Versioned prompts with declared input/output sections for reproducible agent behavior and easy iteration.
-
-9. Developer-Friendly FastAPI + UI
-
-Typed REST endpoints plus lightweight HTML tools for Stage 1, Stage 2, orchestrator testing, and lesson viewing.
-
-10. Comprehensive Test Coverage
-
-Unit tests, pipeline tests, normalization tests, and CRUD validation ensuring stability and regression safety.
+### **4. Intelligent Reject-Loop**
+Adaptive regeneration cycle with memory (`bad_stems`)  
+that avoids repeating weak or invalid questions.
 
 ---
+
+### **5. LMS-Ready Structured Output**
+All paragraphs and questions normalize into a strict LMS schema with:  
+- `courseOutlineId`  
+- `lessonId`  
+- `pageId`  
+- pedagogical metadata  
+
+---
+
+### **6. Pluggable LLM Providers**
+Unified interface for:  
+- OpenAI  
+- Perplexity  
+- Local models (Ollama / GGUF)  
+
+Supports automatic retries, fallbacks, and consistent output formatting.
+
+---
+
+### **7. Production-Grade MongoDB Layer**
+- Idempotent upserts  
+- Schema enforcement  
+- Structured collections (`content_corpus`, `blocks`, `outlines`, etc.)  
+- Metadata-driven traceability  
+
+---
+
+### **8. YAML-Driven Prompt Templates**
+Versioned prompts with declared input/output sections  
+for reproducible agent behavior and rapid iteration.
+
+---
+
+### **9. Developer-Friendly FastAPI + UI**
+- Typed REST endpoints  
+- Lightweight HTML tools for Stage 1, Stage 2  
+- Orchestrator testing  
+- Lesson viewing  
+
+---
+
+### **10. Comprehensive Test Coverage**
+- Unit tests  
+- Pipeline tests  
+- Normalization tests  
+- CRUD validation  
+
+Ensures full system stability and regression safety.
+
+---
+
 ## System Architecture
 
 🗂️ Project Structure
@@ -198,7 +232,7 @@ project_amit_ai_builder/
 ├── result.json # ✅ New – sample output
 ├── requirements.txt
 └── README.md
-
+```
 
 ## Pipeline Overview
 
@@ -290,13 +324,13 @@ project_amit_ai_builder/
       │ [STEP 11] MongoDB Upsert (ContentCorpus)               │
       │ Upsert by cacheKey                                     │
       └────────────────────────────────────────────────────────┘
-
+```
 
 ---
 
 
 ### Stage 2 – Question + Text Pipeline
-
+```
 ┌──────────────────────────────────────────────────────────────┐
 │                    API Request → Stage 2                      │
 │   Inputs: mode, chunks/freePrompt, num_questions, targets…    │
@@ -435,9 +469,11 @@ Loop until:
         │  • # attempts                                              │
         │  • DB block references                                     │
         └────────────────────────────────────────────────────────────┘
+```
 ---
 
 ### Final Pipeline
+```
 ┌───────────────────────────────────────────────────────────────────┐
 │                     API Request → Full Pipeline                   │
 │   Input: FullLessonInput                                          │
@@ -527,7 +563,7 @@ Loop until:
         │ { success: False, error: "Invalid mode",                   │
         │   message: "Mode must be stage1 or stage2" }               │
         └────────────────────────────────────────────────────────────┘
-
+```
 ---
 ## 🧠 Agents
 
@@ -589,249 +625,282 @@ and is orchestrated through a central controller to ensure deterministic and ped
 ---
 ## 🔧 Normalizers & Validators
 
-Amit AI Content Builder includes a robust normalization and validation layer designed to enforce structure, correctness, and consistency across all generated content.
-These components ensure that LLM outputs become deterministic, schema-safe, and LMS-ready.
+Amit AI Content Builder includes a robust normalization and validation layer designed to enforce **structure**, **correctness**, and **consistency** across all generated content.  
+These components ensure that LLM outputs become **deterministic**, **schema-safe**, and **LMS-ready**.
 
-1. Question Normalizer
-
-Standardizes question objects across all agents and modes.
-Responsibilities:
-
-Normalize MCQ structure (stem, choices, correct_index)
-
-Shuffle distractors while preserving answer correctness
-
-Enforce consistent field naming
-
-Detect duplicate questions via semantic stem matching
-
-File: question_normalizer.py
-
-2. LMS Structure Normalizer
-
-Transforms raw agent outputs (chat messages, text blocks, question arrays) into strict LMS-compliant JSON objects.
-Responsibilities:
-
-Convert free-text into LMS block structures
-
-Inject hierarchy metadata (courseOutlineId → lessonId → sectionId → pageId)
-
-Apply content-type specific formatting (Paragraph / Question / Matching / Open)
-
-Validate completeness and required fields
-
-File: lms_normalizer.py
-
-3. Document Validator
-
-Validates full-lesson JSON documents before saving or returning to clients.
-Responsibilities:
-
-Schema enforcement for LMS lessons and pages
-
-Block-level validation (question formats, metadata correctness)
-
-Detection of missing or malformed sections
-
-Severity-tagged error reporting
-
-File: validation.py
-
-4. Pedagogical Validators (Stage 2)
-
-A specialized validation stack used during question generation to guarantee instructional quality.
-Includes:
-
-BloomLevelVerifierAgent → Cognitive level accuracy
-
-DifficultyLevelVerifierAgent → Difficulty alignment
-
-GroundingVerifierAgent → Evidence-based correctness
-
-These validators work together to enforce pedagogical soundness before questions are accepted into the final output.
 ---
-## 📚 Database Schema
-Amit AI Content Builder uses a structured, production-grade MongoDB design, optimized for traceability, versioning, and multi-agent pipelines.
 
-Core Collections
-1. content_corpus
+### **1. Question Normalizer**
+
+Standardizes question objects across all agents and modes.  
+**Responsibilities:**
+- Normalize MCQ structure (stem, choices, correct_index)  
+- Shuffle distractors while preserving answer correctness  
+- Enforce consistent field naming  
+- Detect duplicate questions via semantic stem matching  
+
+**File:** `question_normalizer.py`
+
+---
+
+### **2. LMS Structure Normalizer**
+
+Transforms raw agent outputs (chat messages, text blocks, question arrays) into strict LMS-compliant JSON objects.  
+
+**Responsibilities:**
+- Convert free-text into LMS block structures  
+- Inject hierarchy metadata (`courseOutlineId → lessonId → sectionId → pageId`)  
+- Apply formatting per content type (Paragraph / Question / Matching / Open)  
+- Validate completeness and required fields  
+
+**File:** `lms_normalizer.py`
+
+---
+
+### **3. Document Validator**
+
+Validates full-lesson JSON documents before saving or returning to clients.  
+
+**Responsibilities:**
+- Schema enforcement for LMS lessons and pages  
+- Block-level validation (question formats, metadata correctness)  
+- Detection of missing or malformed sections  
+- Severity-tagged error reporting  
+
+**File:** `validation.py`
+
+---
+
+### **4. Pedagogical Validators (Stage 2)**
+
+A specialized validation stack used during question generation to guarantee instructional quality.  
+
+**Includes:**
+- **BloomLevelVerifierAgent** → Cognitive level accuracy  
+- **DifficultyLevelVerifierAgent** → Difficulty alignment  
+- **GroundingVerifierAgent** → Evidence-based correctness  
+
+These validators work together to enforce **pedagogical soundness** before questions are accepted into the final output.
+
+---
+
+### 📚 Database Schema
+
+Amit AI Content Builder uses a structured, production-grade MongoDB design, optimized for **traceability**, **versioning**, and **multi-agent pipelines**.
+
+---
+
+### **Core Collections**
+
+---
+
+### **1. content_corpus**
 
 Stores the full output of Stage 1.
-Fields include:
 
-topicName, subject, gradeLevel
+**Fields include:**
+- `topicName`, `subject`, `gradeLevel`
+- `sourceChunks[]` (wiki/perplexity/uploads)
+- `contextualSummary`, `lessonSummaries`
+- `pedagogicalAnalysis`
+- `pipeline_run_id`
 
-sourceChunks[] (wiki/perplexity/uploads)
+---
 
-contextualSummary, lessonSummaries
-
-pedagogicalAnalysis
-
-pipeline_run_id
-
-2. blocks
+### **2. blocks**
 
 Atomic LMS units created in Stage 2.
-Examples:
 
-Paragraph blocks
+**Examples:**
+- Paragraph blocks  
+- MCQ / Open / Matching questions  
+- Edited text blocks  
 
-MCQ / Open / Matching questions
+**Each block contains:**
+- `blockType`  
+- `content` (typed structure)  
+- `metadata` (difficulty, bloom, source chunk IDs, etc.)  
+- Hierarchy metadata: `courseOutlineId → lessonId → sectionId → pageId`
 
-Edited text blocks
+---
 
-Each block contains:
+### **3. outlines**
 
-blockType
-
-content (typed structure)
-
-metadata (difficulty, bloom, source chunk IDs, etc.)
-
-courseOutlineId → lessonId → sectionId → pageId
-
-3. outlines
-
-Hierarchical course → lesson → page tree.
+Hierarchical course → lesson → page tree.  
 Generated independently & referenced by blocks.
 
-4. general_logs / deployment_logs / chat_history
-
-Operational logging collections to support debugging, pipeline audits, and user interaction tracking.
 ---
-#🖥️ UI Screens
-The project includes lightweight HTML tools under /static, enabling rapid development and debugging.
 
-Screen	Path	Purpose
-Stage 1 Generator	/static/generate_corpus.html	Kick off content corpus creation
-Stage 2 Generator	/static/generate_stage2.html	Edit text / generate questions
-Orchestrator Tester	/static/orchestrator_test.html	Debug multi-agent chat and pipeline flow
-Lesson Viewer	/static/view_lesson.html	Render final LMS-style lesson with blocks
+### **4. general_logs / deployment_logs / chat_history**
 
-Designed for developers, QA, and instructional teams to interact with the system without needing Postman or code.
+Operational logging collections used for:
+- Debugging  
+- Pipeline audits  
+- User interaction tracking  
+
 ---
-# ⚙️ Setup & Installation
-1. Clone the repository
 
+## 🖥️ UI Screens
+
+The project includes lightweight HTML tools under `/static/`, enabling rapid development and debugging.
+
+| **Screen**            | **Path**                          | **Purpose**                                      |
+|-----------------------|-----------------------------------|--------------------------------------------------|
+| Stage 1 Generator     | `/static/generate_corpus.html`    | Kick off content corpus creation                 |
+| Stage 2 Generator     | `/static/generate_stage2.html`    | Edit text / generate questions                   |
+| Orchestrator Tester   | `/static/orchestrator_test.html`  | Debug multi-agent chat and pipeline flow         |
+| Lesson Viewer         | `/static/view_lesson.html`        | Render final LMS-style lesson with blocks        |
+
+Designed for developers, QA, and instructional teams to interact with the system without needing Postman or writing code.
+
+---
+## ⚙️ Setup & Installation
+
+---
+
+### **1. Clone the repository**
+```bash
 git clone https://github.com/eyalshub/amit-ai-builder.git
 cd amit-ai-builder
+```
 
-2. Install dependencies
+### **2. Install dependencies
+```
 pip install -r requirements.txt
+```
 
-3. Environment variables
+### **3. Environment variables
+```
 OPENAI_API_KEY=...
 PERPLEXITY_API_KEY=...
 MONGODB_URI=...
+```
 
-4. Run the server
+### ** 4. Run the server
+```
 uvicorn app.main:app --reload
+```
 
-5. Access UI screens
+### **5. Access UI screens
 
-Stage 1 UI → http://localhost:8000/static/generate_corpus.html
+* Stage 1 UI:
+  http://localhost:8000/static/generate_corpus.html
 
-Stage 2 UI → http://localhost:8000/static/generate_stage2.html
+* Stage 2 UI:
+  http://localhost:8000/static/generate_stage2.html
 
-Orchestrator UI → http://localhost:8000/static/orchestrator_test.html
+* Orchestrator UI:
+  http://localhost:8000/static/orchestrator_test.html
+
 ---
-# 🔌 API Endpoints
-Stage 1 – Content Corpus
-POST /api/v1/content_corpus/generate
+## 🔌 API Endpoints
+
+---
+
+### **Stage 1 – Content Corpus**
+**POST** `/api/v1/content_corpus/generate`  
 Generates the full pedagogical corpus (wiki, perplexity, lesson content, context, summaries).
 
-Stage 2 – Text Editing
-POST /api/v1/stage2/edit_text
+---
 
-Stage 2 – Question Generation
-POST /api/v1/stage2/generate_questions
+### **Stage 2 – Text Editing**
+**POST** `/api/v1/stage2/edit_text`
 
-Chat-Orchestrator
-POST /api/v1/orchestrator/chat
+---
 
-Free Chat
-POST /api/v1/chat/free
+### **Stage 2 – Question Generation**
+**POST** `/api/v1/stage2/generate_questions`
 
-Full OpenAPI docs:
+---
+
+### **Chat-Orchestrator**
+**POST** `/api/v1/orchestrator/chat`
+
+---
+
+### **Free Chat**
+**POST** `/api/v1/chat/free`
+
+---
+
+### **Full OpenAPI Docs**
 http://localhost:8000/docs
 
 ---
-#🧪 Testing
+## 🧪 Testing
+
 The project includes comprehensive tests:
-Test Types
 
-* Pipeline tests: Stage 1 & Stage 2 end-to-end
+### **Test Types**
+- Pipeline tests: Stage 1 & Stage 2 end-to-end  
+- Agent tests: LessonContentAgent, normalization, validators  
+- CRUD tests: ContentCorpus, Blocks, Outlines, Logs  
+- Schema validation tests  
 
-* Agent tests: LessonContentAgent, normalization, validators
+---
 
-* CRUD tests: ContentCorpus, Blocks, Outlines, Logs
-
-* Schema validation tests
-
-Run all tests
+### **Run all tests**
+```bash
 pytest -q
+```
 
-Run a specific suite
+###  **Run a specific suite**
 pytest tests/core/pipeline/test_stage2_pipeline.py
 
 
-#🗺️ Roadmap
+## 🗺️ Roadmap
+
 Planned enhancements to expand the system into a next-generation adaptive learning engine:
 
-## Near-Term
-
-* Add per-question rationale generation
-
-* Add semantic search over content corpus
-
-* Expand difficulty model using embeddings
-
-* Integration with pgvector for chunk indexing
-
-## Mid-Term
-
-* Adaptive learning loop based on student performance
-
-* Lesson auto-revision using drift detection
-
-* Multi-language output with automatic translation agents
-
-## Long-Term
-
-* Full AI Curriculum Engine
-
-* Automated personalization per student
-
-* ML model to predict best question type per topic
-## 🔍 Current Functionality
-
-### Stage 1 – Initial Content Corpus Creation
-- Receives user input: `topic`, `subject`, `grade level`, etc.
-- Uses LLM agents (Perplexity, OpenAI, etc.) to fetch and process raw content.
-- Saves the processed content in the `content_corpus` collection in MongoDB.
-- Offers a simple **HTML UI** for triggering the generation.
-- Orchestrates the entire logic via a single pipeline controller.
-
-**File:**  
-app/core/pipeline/stage_1_corpus_initial.py
 ---
 
-**Responsibilities:**
-- Coordinates calls to LLM agents
-- Manages processing logic
-- Stores the final result in MongoDB (`content_corpus`)
+### **Near-Term**
+- Add per-question rationale generation  
+- Add semantic search over content corpus  
+- Expand difficulty model using embeddings  
+- Integration with pgvector for chunk indexing  
 
+---
 
+### **Mid-Term**
+- Adaptive learning loop based on student performance  
+- Lesson auto-revision using drift detection  
+- Multi-language output with automatic translation agents  
 
-This module:
-- Coordinates calls to LLM agents
-- Manages processing logic
-- Stores the final result in MongoDB (`content_corpus`)
+---
 
+### **Long-Term**
+- Full AI Curriculum Engine  
+- Automated personalization per student  
+- ML model to predict best question type per topic  
 
-**UI:**  
+---
+
+## 🔍 Current Functionality
+
+### **Stage 1 – Initial Content Corpus Creation**
+- Receives user input: `topic`, `subject`, `grade level`, etc.  
+- Uses LLM agents (Perplexity, OpenAI, etc.) to fetch and process raw content.  
+- Saves the processed content in the `content_corpus` collection in MongoDB.  
+- Offers a simple **HTML UI** for triggering the generation.  
+- Orchestrates the entire logic via a single pipeline controller.  
+
+**File:**  
+`app/core/pipeline/stage_1_corpus_initial.py`
+
+---
+
+### **Responsibilities**
+- Coordinates calls to LLM agents  
+- Manages processing logic  
+- Stores the final result in MongoDB (`content_corpus`)  
+
+(This module description intentionally repeats responsibilities, unchanged.)
+
+---
+
+### **UI**
 [http://localhost:8000/static/generate_corpus.html](http://localhost:8000/static/generate_corpus.html)
-
 
 
 
@@ -841,87 +910,98 @@ This module:
 
 ## ✏️ Stage 2 – Text Editing & Question Generation
 
-This stage enhances the raw educational content from Stage 1 by generating LMS-ready blocks.  
+This stage enhances the raw educational content from Stage 1 by generating **LMS-ready blocks**.
 
-### Supported Modes
-- `edit_text` → Edits and refines paragraphs.  
-- `generate_questions` → Generates questions (MCQ, open, matching) based on a chunk.
+---
 
-### Agents Involved
+### **Supported Modes**
+- `edit_text` → Edits and refines paragraphs  
+- `generate_questions` → Generates questions (MCQ, open, matching) based on a chunk  
+
+---
+
+### **Agents Involved**
+
 1. **TextEditorAgent**  
-   - Refines text for students.  
+   - Refines text for students  
    - Prompt: `prompts/templates/text_editor_prompt.yaml`
 
 2. **QuestionGeneratorAgent**  
-   - Generates questions based on input chunk.  
+   - Generates questions based on input chunk  
    - Prompt: `prompts/templates/question_generator_prompt.yaml`
 
 3. **BloomLevelVerifierAgent**  
-   - Verifies match with Bloom taxonomy.  
+   - Verifies match with Bloom taxonomy  
    - Prompt: `prompts/templates/cognitive_level_verifier_prompt.yaml`
 
 4. **DifficultyLevelVerifierAgent**  
-   - Scores question difficulty.  
+   - Scores question difficulty  
    - Prompt: `prompts/templates/difficulty_level_verifier_prompt.yaml`
 
 5. **GroundingVerifierAgent**  
-   - Validates that question is grounded in source text.  
+   - Validates that question is grounded in source text  
    - Prompt: `prompts/templates/grounding_verifier_prompt.yaml`
 
-### Output & Storage
-- Saved to the `blocks` MongoDB collection.  
-- Includes metadata like:
-  - `blockType`, `question`, `bloomLevel`, `difficulty`, `pipeline_run_id`
-  - Hierarchical course fields (`courseId`, `lessonId`, `pageId`)
+---
+
+### **Output & Storage**
+- Saved to the `blocks` MongoDB collection  
+- Includes metadata such as:  
+  - `blockType`, `question`, `bloomLevel`, `difficulty`, `pipeline_run_id`  
+  - Hierarchical fields: `courseId`, `lessonId`, `pageId`
 
 **UI:**  
-[http://localhost:8000/static/generate_stage2.html](http://localhost:8000/static/generate_stage2.html)
-
-#### 💾 Output & Storage
-
-- Saved to the `blocks` MongoDB collection.
-- Includes metadata like:
-  - `blockType`, `question`, `bloomLevel`, `difficulty`, `pipeline_run_id`, and hierarchical course fields.
+http://localhost:8000/static/generate_stage2.html
 
 ---
+
+### 💾 **Output & Storage (Detailed)**
+
+- Stored in `blocks` collection  
+- Includes metadata:  
+  - `blockType`, `question`, `bloomLevel`, `difficulty`, `pipeline_run_id`  
+  - Hierarchical course fields  
+
 ---
 
 ## 🧠 New Components Added
 
-### Agents
-- `lesson_content_agent.py` → Writes lesson-level content (introduction, paragraphs, summary, questions).  
-- `main_llm_orchestrator_agent.py` → The "brain" agent that manages other agents dynamically.
+### **Agents**
+- `lesson_content_agent.py` – Writes lesson-level content (intro, paragraphs, summary, questions)  
+- `main_llm_orchestrator_agent.py` – The “brain” orchestrating agents dynamically  
 
-### Normalizers
-- `lms_normalizer.py` → Normalizes raw chat/file inputs into LMS JSON format.  
-- `question_normalizer.py` → Ensures question objects are standardized across pipelines.
+### **Normalizers**
+- `lms_normalizer.py` – Converts raw outputs into LMS JSON format  
+- `question_normalizer.py` – Standardizes question objects  
 
-### Orchestrator
-- `chat_orchestrator.py` → Routes incoming chat/file/user requests to the correct agents.
+### **Orchestrator**
+- `chat_orchestrator.py` – Routes incoming chat/file/user requests to the correct agents  
 
-### Services
-- `file_ingest.py` → Reads and parses uploaded files into text for the pipeline.  
-- `validation.py` → Validates generated documents against LMS schema.
+### **Services**
+- `file_ingest.py` – Reads and parses uploaded files  
+- `validation.py` – Validates generated documents against LMS schema  
 
-### Pipelines
-- `wiki_expand_pipeline.py` → Expands Wikipedia-style content into structured lessons.
+### **Pipelines**
+- `wiki_expand_pipeline.py` – Expands Wikipedia-style content into structured lessons  
 
-### Schemas
-- `chatbot.py` → Schemas for chatbot interactions.  
-- `lms.py` → Schemas & validation models for LMS-compatible JSON.
+### **Schemas**
+- `chatbot.py` – Schemas for chatbot interactions  
+- `lms.py` – LMS-compatible validation models  
 
-### UI (Static)
-- `orchestrator_test.html` → Debug/test UI for orchestrator flow.  
-- `view_lesson.html` → UI to preview a full lesson (pages + blocks).
+### **UI (Static)**
+- `orchestrator_test.html` – Debug/test UI for orchestrator flow  
+- `view_lesson.html` – UI to preview a full lesson  
 
-### Tests
-- `test_lesson_content_agent.py` → Unit tests for lesson agent.  
-- `test_question_normalizer.py` → Tests normalization logic.  
-- `test_wiki_expand_pipeline.py` → Tests wiki expansion pipeline.  
-- `test_validation.py` → Tests schema validation logic.
+### **Tests**
+- `test_lesson_content_agent.py` – Unit tests for lesson agent  
+- `test_question_normalizer.py` – Tests normalization logic  
+- `test_wiki_expand_pipeline.py` – Tests wiki expansion pipeline  
+- `test_validation.py` – Tests schema validation  
 
 ---
+
 ## 🎥 Demo
+
 ![Demo Screenshot](static/demo_screenshot.png)
 
 
