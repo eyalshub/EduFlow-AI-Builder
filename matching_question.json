@@ -1,0 +1,125 @@
+{
+  "image": "pairing-block",
+  "name": "pairing",
+  "type": "question",
+  "content": {
+    "title": "",
+    "subTitle": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">התאימו בין האירוע המרכזי לבין התוצאה או המאפיין שלו</p>",
+    "display": "columns",
+    "optionsName": "",
+    "matchesName": "",
+    "options": [
+      {
+        "id": "dfd34a8e-7b17-4e4a-a2a9-7b598abe4eaa",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">קריסת הסמכות המלוכנית</p>",
+        "image": "",
+        "matches": [
+          "86189f5d-7118-4dc1-9fdf-02e6a8a39a12"
+        ]
+      },
+      {
+        "id": "51ee6c3c-7a8e-4251-957b-02580d69bf71",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">כיבוש הבסטיליה</p>",
+        "image": "",
+        "matches": [
+          "4c8d23ee-b405-4b22-bf0e-1eec6bbac695"
+        ]
+      },
+      {
+        "id": "67ae6ebc-b709-452e-982f-e410e9e1ee8c",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">הכרזת הצהרת זכויות האדם</p>",
+        "image": "",
+        "matches": [
+          "d35a8917-ede4-4e4d-ac0a-f9fd6e858bce"
+        ]
+      }
+    ],
+    "matches": [
+      {
+        "id": "86189f5d-7118-4dc1-9fdf-02e6a8a39a12",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">התרחשה בשנת 1789</p>",
+        "image": ""
+      },
+      {
+        "id": "4c8d23ee-b405-4b22-bf0e-1eec6bbac695",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">היה מעשה של ההמון</p>",
+        "image": ""
+      },
+      {
+        "id": "d35a8917-ede4-4e4d-ac0a-f9fd6e858bce",
+        "format": "image-text",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">סימלה שינוי מהפכני</p>",
+        "image": ""
+      }
+    ]
+  },
+  "tags": [],
+  "id": "68a43547315dea8113f61e0a",
+  "play": "682add5a80c45e0226a2ec46",
+  "page": "688b38a3a4f266618ba27640",
+  "section": "688b38a3a4f266618ba2763f",
+  "position": 3,
+  "settings": {
+    "optional": false,
+    "type": "default",
+    "submissionStyle": "inline"
+  },
+  "completion": {
+    "coins": 0,
+    "feedback_enabled": true,
+    "levels": [
+      {
+        "code": "failed",
+        "value": 0,
+        "feedback": ""
+      },
+      {
+        "code": "partial",
+        "range": [
+          1,
+          50
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "decent",
+        "range": [
+          51,
+          79
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "good",
+        "range": [
+          80,
+          89
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "great",
+        "range": [
+          90,
+          99
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "perfect",
+        "value": 100,
+        "feedback": ""
+      }
+    ]
+  },
+  "exercise": "68a43547315dea8113f61e0b",
+  "metadata": {
+    "titleVisible": true,
+    "subTitleVisible": true
+  }
+}

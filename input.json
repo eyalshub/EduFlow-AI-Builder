@@ -1,0 +1,25 @@
+{
+  "task": "generate_questions",
+  "userInput": "הקטע עוסק בקריסת הסמכות המלוכנית בצרפת ומהפכת 1789.",
+  "lmsJson": {
+    "topicName": "המהפכה הצרפתית",
+    "subject": "היסטוריה",
+    "gradeLevel": "9",
+    "bigIdea": "שינוי מהפכני",
+    "generationScope": "Single Lesson",
+    "skills": ["הבנה", "ניתוח"],
+    "learningGate": "Discovery Gate",
+    "courseLanguage": "he",
+    "question_types": ["matching"],
+    "num_questions": 1,
+    "save_to_blocks": false,
+    "cognitive_target": "comprehension_application",
+    "target_difficulty": "hard",
+    "chunks": [
+      {
+        "chunk_id": "chunk_001",
+        "text": "ב-1789 קרסה הסמכות המלוכנית בצרפת. ההמון כבש את הבסטיליה, והוכרזה הצהרת זכויות האדם."
+      }
+    ]
+  }
+}

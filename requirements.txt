@@ -1,0 +1,31 @@
+# Core
+fastapi
+uvicorn
+httpx
+pydantic
+python-dotenv
+
+# LLMs
+openai
+langchain
+langchain-community
+langchain-core
+tiktoken
+langchain-openai
+Jinja2
+
+# File processing (optional – consider moving to extras)
+PyPDF2
+pdfminer.six
+pdf2image
+pytesseract
+langdetect
+pdfplumber
+PyMuPDF
+ftfy
+python-docx
+pymupdf
+docx
+# Database
+pymongo
+motor

@@ -1,0 +1,58 @@
+<!-- static/orchestrator_test.html -->
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <title>🚀 Orchestrator Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; direction: rtl; background: #f4f6f9; }
+    textarea, input { width: 100%; padding: 10px; margin-top: 10px; }
+    button { padding: 10px 20px; margin-top: 15px; }
+    pre { background: #eee; padding: 1em; margin-top: 1em; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🎯 בדיקת Orchestrator</h1>
+
+  <label>בחר משימה:</label>
+  <select id="task">
+    <option value="chat">צ'אט חופשי</option>
+    <option value="stage1_full_course">יצירת קורס (שלב 1)</option>
+    <option value="edit_text">עריכת טקסט</option>
+    <option value="generate_questions">יצירת שאלות</option>
+  </select>
+
+  <label>קלט (userInput):</label>
+  <textarea id="userInput" rows="4">מה זה המהפכה התעשייתית?</textarea>
+
+  <label>Course ID:</label>
+  <input type="text" id="courseId" value="course_123" />
+
+  <button onclick="send()">🚀 שלח ל־Orchestrator</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function send() {
+      const task = document.getElementById("task").value;
+      const userInput = document.getElementById("userInput").value;
+      const courseId = document.getElementById("courseId").value;
+
+      const body = {
+        task,
+        userInput,
+        courseId
+      };
+
+      const res = await fetch("/api/v1/llm-orchestrator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const json = await res.json();
+      document.getElementById("result").textContent = JSON.stringify(json, null, 2);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{
+  "image": "free_text",
+  "name": "free_text",
+  "type": "question",
+  "content": {
+    "multi": false,
+    "title": "",
+    "subTitle": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">מה הייתה השפעתה של המפכה הצרפתית ? איך היא השפיעה על החברה ?</p>",
+    "placeholder": "כתבו את תשובתכם כאן",
+    "text": "",
+    "editable": true,
+    "keyboardSettings": {
+      "showMathmaticalKeyboard": false,
+      "keyboardList": [
+        "BASIC",
+        "numeric",
+        "alphabetic"
+      ]
+    }
+  },
+  "id": "68a433de315dea8113f61df2",
+  "play": "682add5a80c45e0226a2ec46",
+  "page": "688b38a3a4f266618ba27640",
+  "section": "688b38a3a4f266618ba2763f",
+  "position": 2,
+  "settings": {
+    "optional": false,
+    "type": "default",
+    "submissionStyle": "inline",
+    "aiFeedbackEnabled": true
+  },
+  "completion": {
+    "coins": 0,
+    "feedback_enabled": true,
+    "levels": [
+      {
+        "code": "failed",
+        "value": 0,
+        "feedback": ""
+      },
+      {
+        "code": "partial",
+        "range": [
+          1,
+          50
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "decent",
+        "range": [
+          51,
+          79
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "good",
+        "range": [
+          80,
+          89
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "great",
+        "range": [
+          90,
+          99
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "perfect",
+        "value": 100,
+        "feedback": ""
+      }
+    ]
+  },
+  "exercise": "68a433de315dea8113f61df3",
+  "metadata": {
+    "titleVisible": true,
+    "subTitleVisible": true
+  }
+}

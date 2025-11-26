@@ -1,0 +1,110 @@
+{
+  "image": "choice-block",
+  "name": "choice",
+  "type": "question",
+  "content": {
+    "type": "text",
+    "title": "",
+    "subTitle": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">מהי עיר הבירה של אנגליה?</p>",
+    "min": 1,
+    "max": 1,
+    "options": [
+      {
+        "id": "b8b22456-22c9-4171-afd9-2c2a471cde5f",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">לונדון</p>",
+        "correct": false
+      },
+      {
+        "id": "5a637427-33fd-4639-aeda-863ca04359c5",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">פריז</p>",
+        "correct": true
+      },
+      {
+        "id": "5c6bb61c-65be-45d0-8df5-9ca75d1d742f",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">רומא</p>",
+        "correct": false
+      },
+      {
+        "id": "4687f672-562b-428d-84e4-fe2e0b01b75f",
+        "title": "<p fontsize=\"18px\" textalign=\"inherit\" class=\"!my-0.5 !py-0 mb-4 body\" style=\"text-align: inherit; font-size: 18px\" font-size=\"18px\">ברלין</p>",
+        "correct": false
+      }
+    ],
+    "shuffle": true,
+    "keyboardSettings": {
+      "showMathmaticalKeyboard": false,
+      "keyboardList": [
+        "BASIC",
+        "numeric",
+        "alphabetic"
+      ]
+    },
+    "fit": "full",
+    "multiSelect": false,
+    "layout": "horizontal",
+    "format": "button"
+  },
+  "settings": {
+    "type": "default",
+    "submissionStyle": "inline",
+    "optional": false
+  },
+  "id": "afb117c6-32ba-4325-af36-ca5290ce87d6",
+  "page": "f98d5626-0843-42c1-a836-611ef25b9751",
+  "section": "d6fa308a-c48b-4abb-9674-c78cb6f1582a",
+  "position": 1,
+  "completion": {
+    "coins": 0,
+    "feedback_enabled": true,
+    "levels": [
+      {
+        "code": "failed",
+        "value": 0,
+        "feedback": ""
+      },
+      {
+        "code": "partial",
+        "range": [
+          1,
+          50
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "decent",
+        "range": [
+          51,
+          79
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "good",
+        "range": [
+          80,
+          89
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "great",
+        "range": [
+          90,
+          99
+        ],
+        "feedback": ""
+      },
+      {
+        "code": "perfect",
+        "value": 100,
+        "feedback": ""
+      }
+    ]
+  },
+  "exercise": "9ff9835a-a090-413a-b30a-fa2d10a1ace5",
+  "metadata": {
+    "titleVisible": true,
+    "subTitleVisible": true
+  },
+  "play": "b1dca3b6-8aa2-475b-96d8-ec04791a010c"
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>📘 תצוגת קורס – Amit AI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 2rem auto;
+      max-width: 900px;
+      padding: 2rem;
+      background-color: #f4f7fa;
+      color: #333;
+      direction: rtl;
+    }
+    h1, h2, h3 { color: #1a1a1a; }
+    .section, .toc, .summary {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    ul { padding-right: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+    pre { white-space: pre-wrap; line-height: 1.6; }
+    .toc h2, .summary h2 { margin-top: 0; }
+    .toc ul {
+      list-style: none;
+      padding-right: 0;
+    }
+    .toc li a {
+      text-decoration: none;
+      color: #0077cc;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 תצוגת קורס</h1>
+  <div id="lesson"></div>
+
+  <script>
+    async function loadLesson() {
+      const params = new URLSearchParams(window.location.search);
+      const corpusId = params.get('corpusId');
+      if (!corpusId) return document.getElementById('lesson').innerText = '❌ מזהה קורס לא נמצא';
+
+      try {
+        const res = await fetch(`/api/v1/content-corpus/${corpusId}`);
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Invalid JSON response");
+        }
+
+        const data = await res.json();
+        const content = data.content || {};
+        const container = document.getElementById('lesson');
+        container.innerHTML = '';
+
+        // ✅ תקציר
+        if (content.finalSummary) {
+          const summary = document.createElement('div');
+          summary.className = 'summary';
+          summary.innerHTML = `
+            <h2>🔍 תקציר:</h2>
+            <p>${content.finalSummary}</p>
+          `;
+          container.appendChild(summary);
+        }
+
+        const lessons = content.lessons || [];
+
+        if (lessons.length > 0) {
+          // ✅ טבלת תוכן
+          const toc = document.createElement('div');
+          toc.className = 'toc';
+          toc.innerHTML = `
+            <h2>🧭 שיעורים:</h2>
+            <ul>
+              ${lessons.map((lesson, idx) =>
+                `<li><a href="#lesson-${idx + 1}">${idx + 1}. ${lesson.lessonTitle || 'ללא כותרת'}</a></li>`
+              ).join('')}
+            </ul>
+          `;
+          container.appendChild(toc);
+
+          // ✅ תוכן שיעורים
+          lessons.forEach((lesson, idx) => {
+            const div = document.createElement('div');
+            div.className = 'section';
+            div.id = `lesson-${idx + 1}`;
+            div.innerHTML = `
+              <h2>🧩 שיעור ${lesson.lessonIndex || idx + 1}: ${lesson.lessonTitle || 'ללא כותרת'}</h2>
+
+              <h3>📥 מבוא</h3>
+              <pre><strong>${lesson.introduction?.title || ''}</strong>\n${lesson.introduction?.paragraph || ''}</pre>
+
+              <h3>📚 פסקאות עיקריות</h3>
+              ${lesson.coreParagraphs?.map(p => `
+                <div>
+                  <strong>${p.title}</strong>
+                  <pre>${p.paragraph}</pre>
+                </div>
+              `).join('') || '<pre>אין</pre>'}
+
+              <h3>📌 סיכום</h3>
+              <pre><strong>${lesson.summary?.title || ''}</strong>\n${lesson.summary?.paragraph || ''}</pre>
+
+              <h3>🗣️ שאלות לדיון</h3>
+              <ul>
+                ${(lesson.discussionQuestions || []).map(q => `<li>${q}</li>`).join('') || '<li>אין</li>'}
+              </ul>
+            `;
+            container.appendChild(div);
+          });
+
+        } else {
+          // ❌ אין שיעורים
+          const msg = document.createElement('div');
+          msg.className = 'section';
+          msg.innerHTML = `<p>⚠️ לא נמצאו שיעורים להצגה במסמך זה.</p>`;
+          container.appendChild(msg);
+        }
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('lesson').innerText = '❌ שגיאה בטעינת הקורס';
+      }
+    }
+
+    loadLesson();
+  </script>
+</body>
+</html>

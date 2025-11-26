@@ -1,0 +1,17 @@
+# Sensitive files and work environments.env
+.venv/
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Development tools
+.vscode/
+.idea/
+
+# Log files and tests
+*.log
+*.sqlite3
+tests/simulations/

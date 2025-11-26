@@ -1,0 +1,40 @@
+{
+  "name": "rich_text",
+  "type": "content",
+  "content": {
+    "data": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "indent": null,
+            "color": null,
+            "dir": null,
+            "textAlign": "inherit",
+            "class": "mb-4 body",
+            "fontSize": "18px"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "המהפכה הצרפתית סימלה מעבר לשלטון עממי ודמוקרטי."
+            }
+          ]
+        }
+      ]
+    },
+    "placeholder": "כיתבו את הפסקה שלכם כאן"
+  },
+  "id": "68a43939315dea8113f61e0c",
+  "play": "682add5a80c45e0226a2ec46",
+  "page": "688b38a3a4f266618ba27640",
+  "section": "688b38a3a4f266618ba2763f",
+  "position": 3,
+  "settings": {
+    "optional": false
+  },
+  "completion": {
+    "coins": 0
+  }
+}

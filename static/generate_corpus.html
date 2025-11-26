@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🔍 יצירת תוכן לשיעור – Amit AI</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0 auto; max-width: 880px; padding: 2rem; background-color: #f9fbfd; color: #222; }
+    h1 { text-align: center; margin-bottom: 1.5rem; color: #1a1a1a; }
+    label { font-weight: 600; display: block; margin-top: 1rem; }
+    input, textarea, select {
+      width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid #ccc; margin-top: 0.3rem;
+      font-family: inherit; font-size: 1rem; box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 100px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    button {
+      margin-top: 1.5rem; padding: 0.9rem 1.4rem; font-size: 1rem;
+      background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;
+    }
+    button:hover:not(:disabled) { background-color: #0056b3; }
+    button:disabled { background-color: #aab7cf; cursor: not-allowed; }
+    .error { color: red; font-weight: bold; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>🚀 יצירת תכנים אוטומטית – Amit AI</h1>
+
+  <form id="contentForm">
+    <label>נושא</label>
+    <input type="text" name="topicName" required />
+
+    <div class="row">
+      <div>
+        <label>מקצוע</label>
+        <input type="text" name="subject" required />
+      </div>
+      <div>
+        <label>שכבת גיל</label>
+        <input type="text" name="gradeLevel" required />
+      </div>
+    </div>
+
+    <label>רעיון מרכזי</label>
+    <input type="text" name="bigIdea" required />
+
+    <div class="row">
+      <div>
+        <label>שפת קורס</label>
+        <select name="courseLanguage">
+          <option value="he">עברית</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div>
+        <label>היקף הפקה</label>
+        <select name="generationScope" id="generationScope">
+          <option value="Single Lesson">שיעור בודד</option>
+          <option value="Full Course">מסלול מלא</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="numLessonsContainer" style="display:none;">
+      <label>מספר שיעורים</label>
+      <input type="number" name="numLessons" min="1" max="30" />
+    </div>
+
+    <label>שער למידה</label>
+    <select name="learningGate">
+      <option value="Meeting Gate">למידה מונחית</option>
+      <option value="Independence Gate">למידה עצמאית</option>
+      <option value="Discovery Gate">למידה חוקרת</option>
+    </select>
+
+    <label>מיומנויות (שורה לכל מיומנות)</label>
+    <textarea name="skills" required></textarea>
+
+    <label>הקשר לימודי (לא חובה)</label>
+    <textarea name="context"></textarea>
+
+    <label>פרומפט חופשי</label>
+    <textarea name="freePrompt"></textarea>
+
+    <label>
+      <input type="checkbox" id="usePerplexity" />
+      השתמש ב־Perplexity
+    </label>
+
+    <button type="submit">✨ צור תוכן</button>
+  </form>
+
+  <div id="errorBox" class="error" style="display:none;"></div>
+
+  <script>
+    const form = document.getElementById('contentForm');
+    const generationScope = document.getElementById('generationScope');
+    const numLessonsContainer = document.getElementById('numLessonsContainer');
+    const errorBox = document.getElementById('errorBox');
+
+    generationScope.addEventListener('change', () => {
+      numLessonsContainer.style.display = generationScope.value === 'Full Course' ? 'block' : 'none';
+    });
+
+    const escapeHTML = str => String(str || '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[m]));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      errorBox.textContent = '';
+
+      const data = new FormData(form);
+      const skills = data.get('skills').split(/\n|,/).map(s => s.trim()).filter(Boolean).join(', ');
+      data.set('skills', skills);
+
+      if (generationScope.value === 'Full Course') {
+        const n = form.querySelector('[name="numLessons"]').value;
+        if (n) data.set('numLessons', n);
+      }
+
+      data.set('usePerplexity', document.getElementById('usePerplexity').checked ? 'true' : 'false');
+
+      try {
+        const res = await fetch('/api/v1/generate-corpus', { method: 'POST', body: data });
+        const text = await res.text();
+        let json;
+        try {
+          json = JSON.parse(text);
+        } catch (e) {
+          errorBox.innerHTML = `⚠️ שגיאה: השרת החזיר תגובה לא צפויה:<br><pre>${escapeHTML(text)}</pre>`;
+          errorBox.style.display = 'block';
+          return;
+        }
+
+        const id = json._id || json.id;
+        if (!id) throw new Error("לא התקבל מזהה מזהה corpus מהשרת.");
+
+        // ✅ הפנייה אוטומטית לעמוד תצוגת שיעור
+        window.location.href = `/static/view_lesson.html?corpusId=${id}`;
+
+      } catch (err) {
+        errorBox.textContent = `שגיאה: ${err.message}`;
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

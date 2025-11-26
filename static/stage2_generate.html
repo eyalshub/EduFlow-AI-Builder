@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>✏️ שלב 2 – עריכת טקסטים ויצירת שאלות</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 2rem;
+            background-color: #f9f9fb;
+            color: #333;
+            direction: rtl;
+        }
+        h1 {
+            text-align: center;
+            color: #2a2a2a;
+            margin-bottom: 2rem;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 1rem;
+            display: block;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .result-box {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            direction: ltr;
+        }
+    </style>
+</head>
+<body>
+
+<h1>✏️ שלב 2 – עריכת טקסטים או יצירת שאלות</h1>
+
+<form id="stage2Form">
+    <label>נושא</label>
+    <input type="text" name="topicName" required>
+
+    <label>מקצוע</label>
+    <input type="text" name="subject" required>
+
+    <label>שכבת גיל</label>
+    <input type="text" name="gradeLevel" required>
+
+    <label>רעיון מרכזי</label>
+    <input type="text" name="bigIdea">
+
+    <label>שער למידה</label>
+    <input type="text" name="learningGate">
+
+    <label>מיומנויות (מופרדות בפסיקים)</label>
+    <input type="text" name="skills">
+
+    <label>מיומנויות מיושרות (comma או שורה חדשה)</label>
+    <textarea name="alignments"></textarea>
+
+    <label>טווח יצירה (generationScope)</label>
+    <select name="generationScope" required>
+        <option value="Single Topic">יחיד</option>
+        <option value="Course Scope">קורס מלא</option>
+    </select>
+
+    <label>טקסט חופשי לפרומפט (אופציונלי)</label>
+    <textarea name="freePrompt"></textarea>
+
+    <label>הקשר לימודי (אופציונלי)</label>
+    <textarea name="context"></textarea>
+
+    <label>טקסט מקור (chunk)</label>
+    <textarea name="chunkText" required></textarea>
+
+    <label>סוג פעולה</label>
+    <select name="mode">
+        <option value="edit_text">📝 עריכת טקסט</option>
+        <option value="generate_questions">❓ יצירת שאלות</option>
+    </select>
+
+    <div id="questionOptions" style="display: none;">
+        <label>סוג שאלה</label>
+        <select name="questionType">
+            <option value="mcq">ברירה</option>
+            <option value="open">פתוחה</option>
+            <option value="matching">התאמה</option>
+        </select>
+
+        <label>רמת חשיבה (Bloom)</label>
+        <select name="bloomLevel">
+            <option value="knowledge">ידע</option>
+            <option value="comprehension_application">הבנה / יישום</option>
+            <option value="inference_evaluation">הסקה / הערכה</option>
+        </select>
+
+        <label>רמת קושי</label>
+        <select name="difficulty">
+            <option value="easy">קל</option>
+            <option value="medium">בינוני</option>
+            <option value="hard">קשה</option>
+        </select>
+
+        <label>כמה שאלות לייצר?</label>
+        <input type="number" name="numQuestions" value="1" min="1" max="10">
+    </div>
+
+    <label>
+        <input type="checkbox" name="saveToBlocks"> 💾 שמור למסד הנתונים
+    </label>
+
+    <button type="submit">🚀 הפעל שלב 2</button>
+</form>
+
+<div id="result" class="result-box" style="display: none;"></div>
+
+<script>
+    const form = document.getElementById("stage2Form");
+    const modeSelect = form.mode;
+    const questionOptions = document.getElementById("questionOptions");
+    const resultBox = document.getElementById("result");
+
+    modeSelect.addEventListener("change", () => {
+        questionOptions.style.display = modeSelect.value === "generate_questions" ? "block" : "none";
+    });
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = {
+            topicName: form.topicName.value,
+            subject: form.subject.value,
+            gradeLevel: form.gradeLevel.value,
+            bigIdea: form.bigIdea.value || null,
+            generationScope: form.generationScope.value,
+            learningGate: form.learningGate.value || null,
+            skills: form.skills.value
+                ? form.skills.value.split(",").map(s => s.trim()).filter(Boolean)
+                : [],
+            alignments: form.alignments.value
+                ? form.alignments.value.split(/\n|,/).map(s => s.trim()).filter(Boolean)
+                : [],
+            context: form.context.value || null,
+            freePrompt: form.freePrompt.value || null,
+            mode: form.mode.value,
+            text: form.chunkText.value,
+            chunks: [{
+                chunk_id: "user_chunk_1",
+                text: form.chunkText.value
+            }],
+            save_to_blocks: form.saveToBlocks.checked
+        };
+
+        if (form.mode.value === "generate_questions") {
+            data.question_types = [form.questionType.value];
+            data.cognitive_target = form.bloomLevel.value;
+            data.target_difficulty = form.difficulty.value;
+            data.num_questions = parseInt(form.numQuestions.value);
+        }
+
+        try {
+            const response = await fetch("/api/v1/stage2/run", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            resultBox.style.display = "block";
+
+            if (response.ok) {
+                resultBox.innerHTML = `<strong>✅ פלט שהתקבל:</strong><pre>${JSON.stringify(result, null, 2)}</pre>`;
+            } else {
+                resultBox.innerHTML = `<span style="color:red;">❌ שגיאה: ${result.detail || "לא ידועה"}</span>`;
+            }
+
+        } catch (err) {
+            resultBox.style.display = "block";
+            resultBox.innerHTML = `<span style="color:red;">❌ שגיאת רשת: ${err.message}</span>`;
+        }
+    });
+</script>
+
+</body>
+</html>
